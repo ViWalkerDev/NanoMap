@@ -19,12 +19,12 @@ ExploreType:
 0
 SimType:
 1
-Grid:
-/home/auri/github/first-party/src/nanomap/config/maps/Map.txt
+SimGrid:
+%ABSOLUTE PATH TO SIM GRID HERE
 Sensor:
-/home/auri/github/first-party/src/nanomap/config/sensors/640x480.txt
+%ABSOLUTE PATH TO FIRST SENSOR CONFIG FILE HERE
 Sensor:
-/home/auri/github/first-party/src/nanomap/config/sensors/VLP16.txt
+%ABSOLUTE PATH TO SECOND SENSOR CONFIG FILE HERE
 Agent:
-/home/auri/github/first-party/src/nanomap/config/agents/Agent.txt
+%ABSOLUTE PATH TO AGENT CONFIG FILE HERE
 #endconfig
