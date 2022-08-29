@@ -51,3 +51,8 @@ Once installed, the library is ready to use. It should build two executables tha
 [nanomap_msgs](https://github.com/ViWalkerDev/nanomap_msgs) is a msg package that is used by nanomap_ros for sending openvdb grid objects between nodes.
 
 [nanomap_rviz2_plugins](https://github.com/ViWalkerDev/nanomap_rviz2_plugins) is an rviz2 plugin for rendering the openvdb grid messages defined by nanomap_msgs and sent by nanomap_ros.
+
+## Performance
+[This](https://youtu.be/UBrlLRqY_E4) is a video of the sensor simulation and map generation capabilities provided by NanoMap and the nanomap_ros package. Functionality is basic, but performance is good. The time to generate and then process the pointclouds took between 2-10ms for a frustum sensor configuration with 10m range and 20-40ms for a LIDAR with 20m range. The test was performed on a laptop with a Ryzen 4900HS and RTX 2060 MaxQ GPU. 
+
+On the Jetson Nano, by taking advantage of the GPU, NanoMap can provide a 5x performance improvement at mapping resolutions of 0.1m over OctoMap. Capable of processing a kinect style depth camera sensor input capped at 5m in approximately 10ms. At 0.05m mapping resolution the same sensor can be processed in approximately 30ms. 
