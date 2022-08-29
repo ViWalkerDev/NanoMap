@@ -2,7 +2,7 @@
 
 # NanoMap Library
 
-The aim of the NanoMap library is to provide accelerated occupancy mapping and simulation capabilities for robotic agents and systems equipped with CUDA capable GPUs. Only frustum style sensors such as RGB-D and Stereo Cameras have GPU accelerated support. LIDAR sensors can still be processed on the CPU, but due to the sparsity of the information they provide, do not benefit from the current methods used to accelerate frustum style sensors. 
+The aim of the NanoMap library is to provide accelerated occupancy mapping and simulation capabilities for robotic agents and systems equipped with CUDA capable GPUs. Only frustum style sensors such as RGB-D and Stereo Cameras have GPU accelerated support. LIDAR sensors can still be processed on the CPU, but due to the sparsity of the information they provide, do not benefit from the current methods used to accelerate frustum style sensors. Publication is pending acceptance, citation details will provided as soon as they are available. 
 
 ## Disclaimer
 
