@@ -1,30 +1,30 @@
 #config
 MappingRes:
-0.05
+0.1
 ProbHitThres:
-0.51
+0.5
 ProbMissThres:
-0.49
+0.5
 GridRes:
 0.1
-TileEdge:
+NodeEdge:
 8
-AllocationFactor:
-0.3
+FrustumAllocationFactor:
+0.4
 FilterType:
 1
+UpdateType:
+0
 ProcessType:
 0
-ExploreType:
+PrecisionType:
 0
-SimType:
+PublishSensor:
 1
 SimGrid:
 %ABSOLUTE PATH TO SIM GRID HERE
 Sensor:
-%ABSOLUTE PATH TO FIRST SENSOR CONFIG FILE HERE
-Sensor:
-%ABSOLUTE PATH TO SECOND SENSOR CONFIG FILE HERE
+%ABSOLUTE PATH TO SENSOR CONFIG FILE HERE
 Agent:
 %ABSOLUTE PATH TO AGENT CONFIG FILE HERE
 #endconfig
