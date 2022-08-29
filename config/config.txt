@@ -15,8 +15,6 @@ FilterType:
 1
 UpdateType:
 0
-ProcessType:
-0
 PrecisionType:
 0
 PublishSensor:
