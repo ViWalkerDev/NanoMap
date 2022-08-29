@@ -1,0 +1,26 @@
+#frustumconfig
+Name:
+640x480
+Id:
+1000
+HRes:
+640
+VRes:
+480
+VFOV:
+43
+Rate:
+50
+MaxRange:
+10
+MinRange:
+0.1
+ProbHit:
+0.95
+ProbMiss:
+0.3
+FrameTransform:
+0.0 -1.0 0.0
+0.0 0.0 1.0
+1.0 0.0 0.0
+#endconfig

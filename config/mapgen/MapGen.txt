@@ -1,0 +1,9 @@
+#cavegenconfig
+file_out map1.vdb
+map_size 50 50 3.5
+grid_res 0.1
+fill_percentage 56
+smoothing_count 4
+active 4 4
+random_seed 1
+seed

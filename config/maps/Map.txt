@@ -1,0 +1,6 @@
+#mapconfig
+File:
+/home/auri/github/first-party/src/nanomap/build/map1.vdb
+Resolution:
+0.05
+#endconfig

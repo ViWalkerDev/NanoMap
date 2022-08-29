@@ -1,0 +1,28 @@
+#laserconfig
+Name:
+VLP16
+Id:
+1001
+AngularHRes:
+0.4
+AngularVRes:
+2
+HFOV:
+360
+VFOV:
+30
+Rate:
+20
+MaxRange:
+50
+MinRange:
+1
+ProbHit:
+0.95
+ProbMiss:
+0.3
+FrameTransform:
+0.0 -1.0 0.0
+0.0 0.0 1.0
+1.0 0.0 0.0
+#endconfig

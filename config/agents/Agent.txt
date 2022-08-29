@@ -1,0 +1,23 @@
+#agentconfig
+Spawn:
+  Type:
+fixed
+  Position:
+3 0 0
+  Orientation:
+0 0 0 0
+Observations:
+  NumObs:
+80
+  LenObs:
+20
+  CollisionDist:
+0.5
+Sensor:
+  Name:
+640x480
+  Position:
+0 0 0
+  Orientation:
+1.0 0.0 0.0 0.0
+#endconfig
