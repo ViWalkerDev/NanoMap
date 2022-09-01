@@ -52,17 +52,6 @@ __global__ void voxelBufferClear(float* buffer, int size)
       *(buffer+x*4+3) = 0.0;
 }
 
-__global__ void voxelBufferClearHalf2(__half2* buffer, int size)
-{
-    const int x = blockIdx.x * blockDim.x + threadIdx.x;
-    if(x >= size){
-        return;
-    }
-
-      *(buffer+x*2) = __half2half2((__half)0.0);
-      *(buffer+x*2+1) = __half2half2((__half)0.0);
-}
-
 __global__ void voxelBufferClearSimple(int* buffer, int size)
 {
     const int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -131,7 +120,7 @@ __global__ void voxelFilter(
       }
     }
   }
- 
+
     __global__ void voxelFilterSimple(
                 nanomap::gpu::PointCloud&                               pclArray,
                 int*                                       voxelFilterBuffer,
