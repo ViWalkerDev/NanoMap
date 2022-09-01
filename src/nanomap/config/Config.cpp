@@ -52,6 +52,9 @@ namespace nanomap{
 
 
         }
+        if(_frustumLeafBufferSize > 0){
+          _processType = 1;
+        }
       }
     }
     void Config::loadConfig(){
@@ -72,14 +75,7 @@ namespace nanomap{
       }
       while(input->good()) {
           *input >> line;
-          if (line.compare("SerialUpdate:") == 0){
-            *input >> serialUpdate;
-            if(serialUpdate){
-              _serialUpdate = true;
-            }else{
-              _serialUpdate = false;
-            }
-          }else if (line.compare("MappingRes:") == 0){
+          if (line.compare("MappingRes:") == 0){
             *input >> mappingRes;
             _mappingRes = mappingRes;
           }else if (line.compare("ProbHitThres:") == 0){
@@ -97,28 +93,16 @@ namespace nanomap{
           }else if (line.compare("FrustumAllocationFactor:") == 0){
             *input >> frustumAllocationFactor;
             _frustumAllocationFactor = frustumAllocationFactor;
-          }else if (line.compare("LaserAllocationFactor:") == 0){
-            *input >> laserAllocationFactor;
-            _laserAllocationFactor = laserAllocationFactor;
           }else if (line.compare("FilterType:") == 0){
             *input >> filterType;
             _filterType = filterType;
-          }else if (line.compare("ProcessType:") == 0){
-            *input >> processType;
-            _processType = processType;
           }else if(line.compare("UpdateType:")==0){
             *input >> updateType;
             _updateType = updateType;
-          }else if (line.compare("ExploreType:") == 0){
-            *input >> exploreType;
-            _exploreType = exploreType;
           }else if (line.compare("PrecisionType:") == 0){
             *input >> precisionType;
             _precisionType = precisionType;
-          }else if (line.compare("SimType:") == 0){
-            *input >> simType;
-            _simType = simType;
-          }else if (line.compare("SimType:") == 0){
+          }else if (line.compare("PublishType:") == 0){
             *input >> publishSensor;
             _publishSensor = publishSensor;
           }else if (line.compare("#endconfig")==0){

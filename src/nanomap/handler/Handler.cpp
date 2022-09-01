@@ -172,6 +172,7 @@ namespace nanomap{
                   voxelBufferIndex = nodeIndex+voxelIndex;
                   value = (float)(*(_sensorAllocator.sensorBucket()->hostFrustumVoxelBuffer()+voxelBufferIndex))/100;
                   if(value != 0.0){
+                    //std::cout << "new info" << std::endl;
                     _agentMap->occAccessor()->modifyValueAndActiveState(openvdb::Coord(nodeX+x,nodeY+y,nodeZ+z), update);
                   }
                 }
@@ -254,6 +255,8 @@ namespace nanomap{
             filterCloud(*(_sensorAllocator.sensorBucket()), _s0);
 
             cudaDeviceSynchronize();
+            //std::cout << (*_sensorAllocator.sensorBucket()->hostFrustumLeafCount()) << std::endl;
+            //std::cout << (*_sensorAllocator.sensorBucket()->hostRayCount()) << std::endl;
             if(_sensorAllocator.sensorBucket()->hostSensor()->type()==0){
               frustumCastCloud(*(_sensorAllocator.sensorBucket()), _s0, _s1);
               cudaCheck(cudaMemcpyAsync(_sensorAllocator.sensorBucket()->hostFrustumLeafBuffer(), _sensorAllocator.sensorBucket()->devFrustumLeafBuffer(), (*_sensorAllocator.sensorBucket()->hostFrustumLeafCount())*3*sizeof(int), cudaMemcpyDeviceToHost, _s0));

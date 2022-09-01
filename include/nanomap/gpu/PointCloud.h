@@ -129,6 +129,7 @@ __hostdev__ inline void PointCloud::updateData(int size, int point_step, unsigne
                       *(reinterpret_cast<float*>(byte_ptr+4)),
                       *(reinterpret_cast<float*>(byte_ptr+8)), 0.0, 0.0);
       index += 1;
+      //printf("xyz: %f %f %f \n", *(reinterpret_cast<float*>(byte_ptr+0)), *(reinterpret_cast<float*>(byte_ptr+4)), *(reinterpret_cast<float*>(byte_ptr+8)));
     }
 }
 

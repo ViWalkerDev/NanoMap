@@ -26,6 +26,7 @@ __global__ void clearNodeWorkerKernel(nanomap::gpu::NodeWorker& worker, int* act
     if(x >= maxBufferSize){
         return;
     }
+    //printf("clear %d \n", x);
       worker(x) = nanomap::gpu::NodeWorker::Node(0,0);
       *(activeIndices+x)=0;
       *(activeFlags+x)=0;
@@ -93,6 +94,7 @@ __global__ void nodePassHDDA(
     using RayT = nanovdb::Ray<ValueT>;
     using HDDA     = nanovdb::HDDA<RayT>;
     const int index = blockIdx.x * blockDim.x + threadIdx.x;
+    //printf("rayDir: %f | %f | %f \n", pclArray(index).x, pclArray(index).y, pclArray(index).z);
     if (index >= *devRayCount){
         return;
     }else if(pclArray(index).norm <= 0.0 || pclArray(index).norm >= sensor.maxVoxelRange()){
@@ -106,7 +108,9 @@ __global__ void nodePassHDDA(
                       pclArray(index).y,
                         pclArray(index).z);
 
+
         ValueT maxTime = pclArray(index).norm;
+
         ValueT minTime = 0.0f;
         RayT pointRay(rayEye, rayDir);
         HDDA hdda;
@@ -139,6 +143,7 @@ __global__ void nodePassHDDA(
                               gridData.nodeDim()[0],
                               gridData.nodeDim()[1],
                               gridData.nodeDim()[2]).active = 1;
+        //printf("%d | %d | %d \n", nodeX, nodeY, nodeZ);
         }
     }
   }
@@ -315,6 +320,7 @@ extern "C" void frustumCastCloud(  nanomap::gpu::SensorBucket&                  
     //Clear All Node Worker Related Arrays using parallel clear
     const dim3 rayThreads(512), rayNumBlocks(round(*(sensorBucket.hostRayCount()), rayThreads.x));
     int nodeSize = sensorBucket.hostGridData()->nodeBufferSize();
+    //printf("nodeSize = %d", nodeSize);
     const dim3 nodeThreads(512), nodeNumBlocks(round(nodeSize, nodeThreads.x));
     clearNodeWorkerKernel<<<nodeNumBlocks, nodeThreads, 0, s0>>>(*(sensorBucket.leafHandle().deviceNodeWorker()),
                                                                     sensorBucket.activeIndices(),

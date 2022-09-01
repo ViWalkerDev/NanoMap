@@ -467,6 +467,7 @@ __global__ void passthroughFilter(
                   sensor.rotation()(1,0)*point(0)+sensor.rotation()(1,1)*point(1)+sensor.rotation()(1,2)*point(2),
                   sensor.rotation()(2,0)*point(0)+sensor.rotation()(2,1)*point(1)+sensor.rotation()(2,2)*point(2));
 
+    //printf("%f, %f, %f \n", rayDir[0],rayDir[1],rayDir[2]);
     rayDir.normalize();
     pclArray(index) = nanomap::gpu::PointCloud::Point(rayDir[0], rayDir[1], rayDir[2], maxTime, 1.0);
     }

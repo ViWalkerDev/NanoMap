@@ -39,7 +39,7 @@ namespace nanomap{
         _sb->setFilterType(_cf->filterType());
         _sb->setProcessType(_cf->processType());
         //If using node optimisation for frustum cameras
-        if(_cf->processType()==0 || _cf->processType() == 2){
+        if(_cf->processType()==1){ //|| _cf->processType() == 2){
           //Arrays used for sorting the active node information.
           cudaCheck(cudaMalloc((void**)&((*_sb)._activeLeafNodes), _cf->frustumLeafBufferSize()*sizeof(int)));
           //std::cout << "1" << std::endl;
@@ -125,6 +125,7 @@ namespace nanomap{
         cudaCheck(cudaMemcpy(_sb->devRayCount(), _sb->hostRayCount(), sizeof(int), cudaMemcpyHostToDevice));
         _sb->pclHandle().updatePointCloudHandle(pcl_height*pcl_width, pcl_step, cloud);
         _sb->pclHandle().deviceUpload(s0);
+        cudaDeviceSynchronize();
 
     }
 
