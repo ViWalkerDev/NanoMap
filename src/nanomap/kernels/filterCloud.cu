@@ -131,57 +131,7 @@ __global__ void voxelFilter(
       }
     }
   }
-  __global__ void voxelFilterHalf2(
-              nanomap::gpu::PointCloud&                               pclArray,
-              __half2*                                       voxelFilterBuffer,
-              int                                                         size,
-              const nanomap::gpu::Sensor<float>&                        sensor,
-              const nanomap::gpu::GridData&                            gridData)
-  {
-
-      using ValueT = float;
-      using EigenVec = Eigen::Matrix<ValueT, 3, 1>;
-      using Vec3T = nanovdb::Vec3<ValueT>;
-      const int w = blockIdx.x * blockDim.x + threadIdx.x;
-      const int h = blockIdx.y * blockDim.y + threadIdx.y;
-      const int index = w+h*sensor.hRes();
-      //Filter if point is valid
-      if (w >= sensor.hRes() || h >= sensor.vRes()){
-          return;
-      }else if (isnan(pclArray(index).x) || isnan(pclArray(index).y) || isnan(pclArray(index).z) || pclArray(index).norm < 0){
-            pclArray(index).norm = -1;
-            return;
-      }else if (pclArray(index).x < sensor.worldMin()(0) || pclArray(index).x > sensor.worldMax()(0)){
-            pclArray(index).norm = -1;
-            return;
-      }else if (pclArray(index).y < sensor.worldMin()(1) || pclArray(index).y > sensor.worldMax()(1)){
-            pclArray(index).norm = -1;
-            return;
-      }else if (pclArray(index).z < sensor.worldMin()(2) || pclArray(index).z > sensor.worldMax()(2)){
-            pclArray(index).norm = -1;
-            return;
-      }
-      EigenVec point(pclArray(index).x,pclArray(index).y, pclArray(index).z);
-      if(point.norm()>0.0 && point.norm()< sensor.maxRange()){
-
-        Vec3T rayDir(sensor.rotation()(0,0)*point(0)+sensor.rotation()(0,1)*point(1)+sensor.rotation()(0,2)*point(2),
-                   sensor.rotation()(1,0)*point(0)+sensor.rotation()(1,1)*point(1)+sensor.rotation()(1,2)*point(2),
-                   sensor.rotation()(2,0)*point(0)+sensor.rotation()(2,1)*point(1)+sensor.rotation()(2,2)*point(2));
-        int x = __float2int_rd((float)rayDir[0]/(float)sensor.gridRes()+sensor.voxelOriginOffset()(0))-gridData.voxelMin()[0];
-        int y = __float2int_rd((float)rayDir[1]/(float)sensor.gridRes()+sensor.voxelOriginOffset()(1))-gridData.voxelMin()[1];
-        int z = __float2int_rd((float)rayDir[2]/(float)sensor.gridRes()+sensor.voxelOriginOffset()(2))-gridData.voxelMin()[2];
-        if(!(x>=gridData.voxelDim()[0] || y>=gridData.voxelDim()[1] || z>=gridData.voxelDim()[2]) && (!(x<0 || y<0 || z<0))){
-          int i = z + y*gridData.voxelDim()[2] + x*gridData.voxelDim()[2]*gridData.voxelDim()[1];
-          if(i < size){
-            __half2 xy = __floats2half2_rn((rayDir[0]/sensor.gridRes()-(__float2int_rd(rayDir[0]/sensor.gridRes()))),
-                                          (rayDir[1]/sensor.gridRes()-(__float2int_rd(rayDir[1]/sensor.gridRes()))));
-            __half2 zcount = __floats2half2_rn((rayDir[2]/sensor.gridRes()-(__float2int_rd(rayDir[2]/sensor.gridRes()))), 1.0);
-            atomicAdd(voxelFilterBuffer+i*2, xy);
-            atomicAdd(voxelFilterBuffer+i*2+1, zcount);
-          }
-        }
-      }
-    }
+ 
     __global__ void voxelFilterSimple(
                 nanomap::gpu::PointCloud&                               pclArray,
                 int*                                       voxelFilterBuffer,
@@ -316,45 +266,7 @@ __global__ void voxelFilter(
         }
     }
 }
-__global__ void rayFromFilterHalf2(
-            nanomap::gpu::PointCloud&                               pclArray,
-            __half2*                                                     voxelFilterBuffer,
-            int*                                                        devRayCount,
-            const nanomap::gpu::Sensor<float>&                        sensor,
-            const nanomap::gpu::GridData&                             gridData)
-{
-  using ValueT = float;
-  using EigenVec = Eigen::Matrix<ValueT, 3, 1>;
-  using Vec3T = nanovdb::Vec3<ValueT>;
-  const int x = blockIdx.x * blockDim.x + threadIdx.x;
-  const int y = blockIdx.y * blockDim.y + threadIdx.y;
-  const int z = blockIdx.z * blockDim.z + threadIdx.z;
-  if(x >= gridData.voxelDim()[0] || y >= gridData.voxelDim()[1] || z >= gridData.voxelDim()[2]){
-    return;
-  }
-  int index = z+y*gridData.voxelDim()[2] + x*gridData.voxelDim()[1]*gridData.voxelDim()[2];
-  float px = __low2float((*(voxelFilterBuffer+index*2)));
-  float py = __high2float((*(voxelFilterBuffer+index*2)));
-  float pz = __low2float((*(voxelFilterBuffer+index*2+1)));
-  float count = __high2float(*(voxelFilterBuffer+index*2+1));
-  if(count>=1.0){
-    EigenVec point(px/count+(float)(x)+(float)(gridData.voxelMin()[0]),
-                    py/count+(float)(y)+(float)(gridData.voxelMin()[1]),
-                      pz/count+(float)(z)+(float)(gridData.voxelMin()[2]));
-    ValueT maxTime = point.norm();
-    point.normalize();
-    if(maxTime > 0.0 && maxTime < sensor.maxVoxelRange()){
 
-        int i = atomicAdd(devRayCount, 1);
-
-        pclArray(i) = nanomap::gpu::PointCloud::Point(point(0),
-                                                          point(1),
-                                                          point(2),
-                                                          maxTime,
-                                                          count);
-      }
-  }
-}
 __global__ void rayFromFilterSimple(
             nanomap::gpu::PointCloud&                               pclArray,
             int*                                                     voxelFilterBuffer,
@@ -505,18 +417,6 @@ extern "C" void filterCloud(nanomap::gpu::SensorBucket& sensorBucket, cudaStream
                                                         *(sensorBucket.devGridData()));
       rayFromFilter<<<voxel3DBlocks, voxel3DThreads, 0, s0>>>(*(sensorBucket.pclHandle().devicePointCloud()),
                                                         sensorBucket.voxelFilterBuffer(),
-                                                        sensorBucket.devRayCount(),
-                                                        *(sensorBucket.devSensor()),
-                                                        *(sensorBucket.devGridData()));
-    }else if(sensorBucket.getPrecisionType()==1){
-      voxelBufferClearHalf2<<<voxelNumBlocks, voxelThreads, 0, s0>>>(sensorBucket.voxelFilterBufferHalf2(), voxelSize);
-      voxelFilterHalf2<<<rayNumBlocks, rayThreads, 0, s0>>>(*(sensorBucket.pclHandle().devicePointCloud()),
-                                                        sensorBucket.voxelFilterBufferHalf2(),
-                                                        voxelSize,
-                                                        *(sensorBucket.devSensor()),
-                                                        *(sensorBucket.devGridData()));
-      rayFromFilterHalf2<<<voxel3DBlocks, voxel3DThreads, 0, s0>>>(*(sensorBucket.pclHandle().devicePointCloud()),
-                                                        sensorBucket.voxelFilterBufferHalf2(),
                                                         sensorBucket.devRayCount(),
                                                         *(sensorBucket.devSensor()),
                                                         *(sensorBucket.devGridData()));

@@ -61,7 +61,7 @@ __host__ void activePartition(int* activeIndices, int* activeFlags, int* activeL
   size_t   temp_storage_bytes = 0;
   cub::DevicePartition::Flagged(d_temp_storage, temp_storage_bytes, activeIndices, activeFlags, activeLeafNodes, devCount, maxBufferSize, cStream);
   // Allocate temporary storage
-  cudaMallocAsync(&d_temp_storage, temp_storage_bytes, cStream);
+  cudaMalloc(&d_temp_storage, temp_storage_bytes);
   // Run selection
   cub::DevicePartition::Flagged(d_temp_storage, temp_storage_bytes, activeIndices, activeFlags, activeLeafNodes, devCount, maxBufferSize, cStream);
   cudaStreamSynchronize(cStream);

@@ -78,14 +78,6 @@ namespace nanomap{
               //Precision == 0, provides full xyz precision for discretising rays to a voxel but costs the most memory
               _sb->setPrecisionType(_cf->precisionType());
               cudaCheck(cudaMalloc((void**)&((*_sb)._voxelFilterBuffer), _cf->leafVolume()*4*(_cf->frustumLeafBufferSize())*sizeof(float)));
-            }else if(_cf->precisionType() == 1){
-            //Precision == 1, provides (half2 type) xyz offset precision for discretising rays to a voxel. It costs half as much memory as precision 0
-            //This is not supported on the Jetson Nano as the nano only supports Compute capability 5.4. This does work on the Xavier NX.
-            //The jetson nano version of this code uses 16 bit integers to store an offset value that has been multiplied by 100.
-            //This uses half the memory, which is good for a memory constrained platform, but loses some precision.
-            //Uses 1/2 the memory of Precision  = 0;
-              _sb->setPrecisionType(_cf->precisionType());
-              cudaCheck(cudaMalloc((void**)&((*_sb)._voxelFilterBufferHalf2), _cf->leafVolume()*2*(_cf->frustumLeafBufferSize())*sizeof(__half2)));
             }else if(_cf->precisionType() == 2){
               //Precision 2 doesn't even bother tracking ray offsets within a voxel, if a ray ends in a voxel, a counter is incremented for that voxel,
               //The resultant ray is always directed at the center of the voxel in question.
