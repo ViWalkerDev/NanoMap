@@ -6,6 +6,21 @@
 
 The aim of the NanoMap library is to provide accelerated occupancy mapping and simulation capabilities for robotic agents and systems equipped with CUDA capable GPUs. Only frustum style sensors such as RGB-D and Stereo Cameras have GPU accelerated support. LIDAR sensors can still be processed on the CPU, but due to the sparsity of the information they provide, do not benefit from the current methods used to accelerate frustum style sensors. 
 
+The related publication is located here: https://www.mdpi.com/2072-4292/14/21/5463
+
+The Bibtex for the citation is:
+
+`@article{walker2022nanomap,
+  title={NanoMap: A GPU-Accelerated OpenVDB-Based Mapping and Simulation Package for Robotic Agents},
+  author={Walker, Violet and Vanegas, Fernando and Gonzalez, Felipe},
+  journal={Remote Sensing},
+  volume={14},
+  number={21},
+  pages={5463},
+  year={2022},
+  publisher={Multidisciplinary Digital Publishing Institute}
+}`
+
 ## Disclaimer
 
 This library is currently in beta and under active development. 
