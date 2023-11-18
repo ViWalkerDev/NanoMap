@@ -9,3 +9,5 @@ The following is a link to the related publication.
 https://www.mdpi.com/2072-4292/15/15/3802
 
 Udpate: The code for this publication will be provided by the end of october/early november 2023. Personal circumstance prevented me from tidying the code base for release until now. Thankyou for your patience.
+
+Update 2:  A dump of the code base is available at https://github.com/ViWalkerDev/mdpi-2023-multi-agent-code. It has not been organised or formatted and is not documented. It has only been provided because I currently do not have the time to do the work necessary for a proper release. It is messy and it is buggy, but this way it is at least there in the event I cannot get the release finished. As it is I am aiming for a proper release early next year if everything goes to plan. 
